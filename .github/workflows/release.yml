@@ -1,6 +1,7 @@
-# Release do framework: versão semver derivada dos Conventional Commits; empacotamento, assinatura (cosign keyless),
-# SBOM SPDX, proveniência (SLSA Build L3, atestada pelo workflow reutilizável release-nuget do Aedis Platform) e
-# publicação ficam no workflow reutilizável. Dispare manualmente para cortar a próxima versão, ou empurre uma tag vX.Y.Z.
+# Release do framework, toda em reutilizáveis do Aedis Platform: dispare manualmente para cortar a próxima versão
+# (release-cut: semver derivado dos Conventional Commits desde a última tag; a tag vX.Y.Z sai com o token da GitHub
+# App e dispara este mesmo workflow em push de tag), ou empurre uma tag vX.Y.Z. Empacotamento, assinatura (cosign
+# keyless), SBOM SPDX, proveniência (SLSA Build L3, atestada pelo release-nuget) e publicação ficam no reutilizável.
 name: release
 
 on:
@@ -20,56 +21,25 @@ jobs:
   cut:
     name: Próxima versão pelos commits
     if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    uses: aedis-build/aedis-platform/.github/workflows/release-cut.yml@1c1cc77f25ebafc85ee7a683e5e6fd58b65c0312 # aedis-platform#75 (repinar no SHA da tag v1.0.0 quando sair)
     permissions:
-      contents: write
-    outputs:
-      tag: ${{ steps.next.outputs.tag }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-          persist-credentials: true
-      - name: Calcular e empurrar a tag
-        id: next
-        env:
-          BUMP: ${{ inputs.bump }}
-        run: |
-          set -euo pipefail
-          last="$(git describe --tags --abbrev=0 --match 'v[0-9]*' 2>/dev/null || echo v0.0.0)"
-          range="$([ "$last" = v0.0.0 ] && echo HEAD || echo "$last..HEAD")"
-          log="$(git log --format='%s%n%b' $range)"
-          bump="$BUMP"
-          if [ "$bump" = auto ]; then
-            if echo "$log" | grep -qE '^[a-z]+(\([^)]*\))?!:|^BREAKING CHANGE'; then bump=major
-            elif echo "$log" | grep -qE '^feat(\([^)]*\))?:'; then bump=minor
-            else bump=patch; fi
-          fi
-          IFS=. read -r major minor patch <<< "${last#v}"
-          case "$bump" in
-            major) major=$((major+1)); minor=0; patch=0 ;;
-            minor) minor=$((minor+1)); patch=0 ;;
-            patch) patch=$((patch+1)) ;;
-          esac
-          tag="v$major.$minor.$patch"
-          echo "última $last → $tag ($bump)"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$tag" -m "release $tag"
-          git push origin "$tag"
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      contents: read
+    with:
+      bump: ${{ inputs.bump }}
+    secrets:
+      app-id: ${{ secrets.AEDIS_APP_ID }}
+      app-private-key: ${{ secrets.AEDIS_APP_PRIVATE_KEY }}
 
   publish:
     name: Empacotar, assinar, atestar e publicar (SLSA Build L3)
-    needs: [cut]
-    if: always() && (github.event_name == 'push' || needs.cut.result == 'success')
-    uses: aedis-build/aedis-platform/.github/workflows/release-nuget.yml@4c8282a6ff3bde1a63a6c79a777a94b92254b7ef # main (#40)
+    if: github.event_name == 'push'
+    uses: aedis-build/aedis-platform/.github/workflows/release-nuget.yml@1c1cc77f25ebafc85ee7a683e5e6fd58b65c0312 # aedis-platform#75 (repinar no SHA da tag v1.0.0 quando sair)
     permissions:
       contents: write
       id-token: write
       attestations: write
     with:
-      tag: ${{ needs.cut.outputs.tag || github.ref_name }}
+      tag: ${{ github.ref_name }}
       solution: Aedis.slnx
       artifact-name: aedis
       # nuget.org por Trusted Publishing (OIDC, sem chave): a política da organização Aedis no nuget.org aceita este
