@@ -27,8 +27,8 @@ jobs:
     with:
       bump: ${{ inputs.bump }}
     secrets:
-      app-id: ${{ secrets.AEDIS_APP_ID }}
-      app-private-key: ${{ secrets.AEDIS_APP_PRIVATE_KEY }}
+      app-id: ${{ secrets.AEDIS_CODER_APP_ID }}
+      app-private-key: ${{ secrets.AEDIS_CODER_APP_PRIVATE_KEY }}
 
   publish:
     name: Empacotar, assinar, atestar e publicar (SLSA Build L3)
