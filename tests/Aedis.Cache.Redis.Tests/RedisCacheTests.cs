@@ -24,7 +24,7 @@ namespace Aedis.Cache.Redis.Tests;
 /// </summary>
 public sealed class RedisCacheTests : IAsyncLifetime
 {
-    private readonly RedisContainer _container = new RedisBuilder().Build();
+    private readonly RedisContainer _container = new RedisBuilder("redis:7.0").Build();
 
     public Task InitializeAsync() => _container.StartAsync();
     public Task DisposeAsync() => _container.DisposeAsync().AsTask();

@@ -118,8 +118,7 @@ public sealed class IbmMqPublishConsumeTests
     {
         private const string AppPassword = "Passw0rd!";
 
-        private readonly IContainer _container = new ContainerBuilder()
-            .WithImage(Environment.GetEnvironmentVariable("AEDIS_IBMMQ_IMAGE") ?? "icr.io/ibm-messaging/mq:latest")
+        private readonly IContainer _container = new ContainerBuilder(Environment.GetEnvironmentVariable("AEDIS_IBMMQ_IMAGE") ?? "icr.io/ibm-messaging/mq:latest")
             .WithPortBinding(1414, true)
             .WithEnvironment("LICENSE", "accept")
             .WithEnvironment("MQ_QMGR_NAME", "QM1")

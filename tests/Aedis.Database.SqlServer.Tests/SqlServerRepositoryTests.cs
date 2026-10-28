@@ -490,7 +490,7 @@ public sealed class SqlServerRepositoryTests : IClassFixture<SqlServerRepository
 
         public async Task InitializeAsync() {
             if (!Enabled) return;
-            _container = new MsSqlBuilder().Build();
+            _container = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-CU14-ubuntu-22.04").Build();
             await _container.StartAsync();
             var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?> {
                 ["Database:ConnectionString"] = _container.GetConnectionString()

@@ -21,7 +21,7 @@ public sealed class RabbitMqPublishSubscribeTests : IAsyncLifetime
     private const string Username = "aedis";
     private const string Password = "aedis";
 
-    private readonly RabbitMqContainer _container = new RabbitMqBuilder()
+    private readonly RabbitMqContainer _container = new RabbitMqBuilder("rabbitmq:3.11")
         .WithUsername(Username)
         .WithPassword(Password)
         .Build();

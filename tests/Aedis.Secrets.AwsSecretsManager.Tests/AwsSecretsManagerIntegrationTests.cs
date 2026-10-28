@@ -74,7 +74,7 @@ public sealed class AwsSecretsManagerIntegrationTests : IClassFixture<AwsSecrets
             Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "test");
             Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "test");
             Environment.SetEnvironmentVariable("AWS_DEFAULT_REGION", "us-east-1");
-            _container = new LocalStackBuilder().WithImage("localstack/localstack:3.8.1").Build();
+            _container = new LocalStackBuilder("localstack/localstack:3.8.1").Build();
             await _container.StartAsync();
         }
 
