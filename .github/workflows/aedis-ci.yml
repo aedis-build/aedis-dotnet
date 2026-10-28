@@ -15,7 +15,7 @@ permissions: {}
 
 jobs:
   aedis:
-    uses: aedis-build/aedis-platform/.github/workflows/aedis-ci.yml@87835c71df53fae48e13a535f6b04de95bca5955 # v1.2.2
+    uses: aedis-build/aedis-platform/.github/workflows/aedis-ci.yml@f45b84fcf438b4bdd31b4f5fc7217c6ea9f54b97 # aedis-platform#108, repin to the release tag that ships it
     permissions:
       contents: read
       actions: read
