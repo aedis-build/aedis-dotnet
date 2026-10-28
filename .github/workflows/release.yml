@@ -21,7 +21,7 @@ jobs:
   cut:
     name: Próxima versão pelos commits
     if: github.event_name == 'workflow_dispatch'
-    uses: aedis-build/aedis-platform/.github/workflows/release-cut.yml@87835c71df53fae48e13a535f6b04de95bca5955 # v1.2.2
+    uses: aedis-build/aedis-platform/.github/workflows/release-cut.yml@255a90d04956caf7436320b50f104aaf80502e64 # v1.2.4
     permissions:
       contents: read
     with:
@@ -33,7 +33,7 @@ jobs:
   publish:
     name: Empacotar, assinar, atestar e publicar (SLSA Build L3)
     if: github.event_name == 'push'
-    uses: aedis-build/aedis-platform/.github/workflows/release-nuget.yml@87835c71df53fae48e13a535f6b04de95bca5955 # v1.2.2
+    uses: aedis-build/aedis-platform/.github/workflows/release-nuget.yml@255a90d04956caf7436320b50f104aaf80502e64 # v1.2.4
     permissions:
       contents: write
       id-token: write
