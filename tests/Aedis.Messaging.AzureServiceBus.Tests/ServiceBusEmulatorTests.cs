@@ -24,7 +24,7 @@ public sealed class ServiceBusEmulatorFixture : IAsyncLifetime
         "q-dispose", "q-manager", "q-admin"
     ];
 
-    private readonly ServiceBusContainer _container = new ServiceBusBuilder()
+    private readonly ServiceBusContainer _container = new ServiceBusBuilder("mcr.microsoft.com/azure-messaging/servicebus-emulator:latest")
         .WithAcceptLicenseAgreement(true)
         .WithResourceMapping(Encoding.UTF8.GetBytes(EmulatorConfig()),
             "/ServiceBus_Emulator/ConfigFiles/Config.json")

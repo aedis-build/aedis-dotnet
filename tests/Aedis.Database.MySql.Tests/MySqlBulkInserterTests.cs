@@ -98,8 +98,7 @@ public sealed class MySqlBulkInserterTests : IClassFixture<MySqlBulkInserterTest
 
     public sealed class MySqlFixture : IAsyncLifetime
     {
-        private readonly MySqlContainer _container = new MySqlBuilder()
-            .WithImage("mysql:8.4")
+        private readonly MySqlContainer _container = new MySqlBuilder("mysql:8.4")
             .Build();
 
         private ServiceProvider _provider = null!;

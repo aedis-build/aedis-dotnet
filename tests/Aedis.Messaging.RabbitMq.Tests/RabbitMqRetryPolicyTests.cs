@@ -14,7 +14,7 @@ namespace Aedis.Messaging.RabbitMq.Tests;
 /// <summary>Sobe um RabbitMQ por classe de teste (xUnit instancia a classe a cada teste).</summary>
 public sealed class RabbitMqFixture : IAsyncLifetime
 {
-    private readonly RabbitMqContainer _container = new RabbitMqBuilder()
+    private readonly RabbitMqContainer _container = new RabbitMqBuilder("rabbitmq:3.11")
         .WithUsername("aedis").WithPassword("aedis").Build();
 
     public RabbitMqMessageBrokerService CreateBroker() =>
