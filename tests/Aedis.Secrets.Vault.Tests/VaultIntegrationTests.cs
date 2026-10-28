@@ -76,8 +76,7 @@ public sealed class VaultIntegrationTests : IClassFixture<VaultIntegrationTests.
 
         public async Task InitializeAsync() {
             if (!Enabled) return;
-            _container = new ContainerBuilder()
-                .WithImage("hashicorp/vault:1.18")
+            _container = new ContainerBuilder("hashicorp/vault:1.18")
                 .WithEnvironment("VAULT_DEV_ROOT_TOKEN_ID", RootToken)
                 .WithEnvironment("VAULT_DEV_LISTEN_ADDRESS", "0.0.0.0:8200")
                 .WithCommand("server", "-dev")

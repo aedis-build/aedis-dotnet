@@ -106,8 +106,7 @@ public sealed class TenancyRowLevelSecurityTests : IClassFixture<TenancyRowLevel
     {
         private const string AppPassword = "app-test-only";
 
-        private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
-            .WithImage("postgres:16-alpine")
+        private readonly PostgreSqlContainer _container = new PostgreSqlBuilder("postgres:16-alpine")
             .Build();
 
         public AmbientTenantContext Tenant { get; } = new();

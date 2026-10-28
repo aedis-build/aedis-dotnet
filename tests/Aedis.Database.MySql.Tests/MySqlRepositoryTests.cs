@@ -533,8 +533,7 @@ public sealed class MySqlRepositoryTests : IClassFixture<MySqlRepositoryTests.Re
 
     public sealed class RepoFixture : IAsyncLifetime
     {
-        private readonly MySqlContainer _container = new MySqlBuilder()
-            .WithImage("mysql:8.4")
+        private readonly MySqlContainer _container = new MySqlBuilder("mysql:8.4")
             .Build();
 
         private ServiceProvider _provider = null!;
